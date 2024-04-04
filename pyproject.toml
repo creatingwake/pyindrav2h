@@ -1,0 +1,31 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyindrav2h"
+version = "0.0.2"
+description = "API client and example CLI to interact with Indra V2H Chargers"
+readme = "README.md"
+authors = [{ name = "Paul Morris", email = "paul@creatingwake.com" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["v2h", "indra", "v2g", "v2x"]
+dependencies = [
+    "httpx",
+    "bs4",
+    "lxml",
+]
+requires-python = ">=3.9"
+
+[project.urls]
+Homepage = "https://github.com/creatingwake/pyindrav2h"
+
+[project.scripts]
+indracli = "pyindrav2h.cli:cli"
