@@ -26,7 +26,7 @@ On installation a CLI will become available: ```indracli```
 ### CLI
 
 ```bash
-usage: cli [-h] [-u EMAIL] [-p PASSWORD] [-d]
+usage: indracli [-h] [-u EMAIL] [-p PASSWORD] [-d]
            {statistics,device,all,loadmatch,idle,schedule} ...
 
 Indra V2H CLI
