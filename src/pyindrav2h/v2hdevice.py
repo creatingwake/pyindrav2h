@@ -28,7 +28,10 @@ class v2hDevice:
         return await self.__set_mode(V2H_MODES['IDLE'])       
 
     async def schedule(self):
-        return await self.__set_mode(V2H_MODES['SCHEDULE'])  
+        return await self.__set_mode(V2H_MODES['SCHEDULE'])
+    
+    async def select_charger_mode(self, mode):
+        return await self.__set_mode(V2H_MODES[mode])
 
     async def refresh_stats(self):
         s = await self.connection.get("/telemetry/devices/" + self.serial + 
