@@ -26,18 +26,20 @@ On installation a CLI will become available: ```indracli```
 ### CLI
 
 ```bash
-usage: indracli [-h] [-u EMAIL] [-p PASSWORD] [-d]
-           {statistics,device,all,loadmatch,idle,schedule} ...
+usage: indracli [-h] [-u EMAIL] [-p PASSWORD] [-d] {statistics,device,all,loadmatch,idle,exportmatch,charge,discharge,schedule} ...
 
 Indra V2H CLI
 
 positional arguments:
-  {statistics,device,all,loadmatch,idle,schedule}
+  {statistics,device,all,loadmatch,idle,exportmatch,charge,discharge,schedule}
     statistics          show device statistics
     device              show device info
     all                 show all info
     loadmatch           set mode to load matching
     idle                set mode to IDLE
+    exportmatch         set mode to export matching
+    charge              set mode to CHARGE
+    discharge           set mode to discharge
     schedule            return to scheuduled mode
 
 options:

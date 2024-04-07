@@ -16,11 +16,12 @@ class v2hDevice:
         d = await self.connection.get("/authorize/validate")
         self.data = d
     
-    async def __set_mode(self, mode):
+    async def __set_mode(self, mode, payload=None):
         s = await self.connection.post("/transactions/" + self.id + 
-                                        "/interrupt/" + mode)
+                                        "/interrupt/" + mode,
+                                        payload)
         return s
-    
+
     async def load_match(self):
         return await self.__set_mode(V2H_MODES['LOAD_MATCH'])
 
@@ -30,8 +31,10 @@ class v2hDevice:
     async def schedule(self):
         return await self.__set_mode(V2H_MODES['SCHEDULE'])
     
-    async def select_charger_mode(self, mode):
-        return await self.__set_mode(V2H_MODES[mode])
+    async def select_charger_mode(self, mode, rate=None):
+        if mode in {'CHARGE', 'DISCHARGE'}:
+            rate = {"limitAmps": 25} # charge / discharge fixed at max rate for now
+        return await self.__set_mode(V2H_MODES[mode], rate)
 
     async def refresh_stats(self):
         s = await self.connection.get("/telemetry/devices/" + self.serial + 
