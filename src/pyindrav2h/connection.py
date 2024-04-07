@@ -24,37 +24,48 @@ class Connection:
         self._xsrfToken = None
         self._bearerToken = None
         self._cookies = None
+        self._authRetries = 2
         _LOGGER.debug("New connection created")
 
-    async def checkAPICreds(self):
+    async def updateBearerAuth(self):
+        _LOGGER.debug(f"Updating BearerToken")
         self._xsrfToken = await self.getXsrf(loginUrl)
         _LOGGER.debug(f"XSRF token: {self._xsrfToken}")
         self._bearerToken = await self.getAuth("POST", "/login")
         self._headers["Authorization"] = self._bearerToken
-        succ = {'success': 'True'}
-        if succ['success'] == False:
+
+    async def checkAPICreds(self):
+        await self.updateBearerAuth()
+        if self._bearerToken is None:
             raise WrongCredentialsException()
     
     async def send(self, method, url, json=None):
-        # params = {'api_key': self.email, 'api_secret': self.password}
+        if self._bearerToken is None:
+            _LOGGER.error("Missing BearerToken - calling updateBearerAuth()")
+            await self.updateBearerAuth()
+
         async with httpx.AsyncClient(
             headers=self._headers, timeout=self.timeout
         ) as httpclient:
-            # theUrl = apiBaseUrl + url
-            theUrl = url
-            try:
-                _LOGGER.debug(f"{method} {url} {theUrl}")
-                response = await httpclient.request(method, theUrl, json=json)
-            except httpx.ReadTimeout:
-                raise TimeoutException()
-            else:
-                if response.status_code == 200:
-                    return response.json()
-                elif response.status_code == 202:
-                    return True
-                elif response.status_code == 401:
-                    raise WrongCredentialsException()
-                raise V2HException(response.status_code)
+            for i in range(self._authRetries): # allow retries to obtain a new Bearer Auth token
+                try:
+                    _LOGGER.debug(f"{method} {url} Attempt: {i}")
+                    response = await httpclient.request(method, url, json=json)
+                except httpx.ReadTimeout:
+                    raise TimeoutException()
+                else:
+                    if response.status_code == 200:
+                        return response.json()
+                    elif response.status_code == 202:
+                        return True
+                    elif response.status_code == 401:
+                        if i < self._authRetries - 1:  # i is zero indexed
+                            await self.updateBearerAuth()
+                            httpclient.headers=self._headers
+                            continue
+                        else:
+                            raise WrongCredentialsException()
+                    raise V2HException(response.status_code)
     
     async def get(self, url, data=None):
         url = apiBaseUrl + url
@@ -107,9 +118,6 @@ class Connection:
                         return jwtToken['value']
                     else:
                         raise WrongCredentialsException()
-
-                    # _LOGGER.debug(f"RESPONSE: {response.text}")
-                    # return response.json()
                 elif response.status_code == 401:
                     raise WrongCredentialsException()
                 raise V2HException(response.status_code)

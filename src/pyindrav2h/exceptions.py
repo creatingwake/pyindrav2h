@@ -23,5 +23,5 @@ class WrongCredentialsException(V2HException):
 
 
 class TimeoutException(V2HException):
-    """Class of exceptions for incomplete credentials."""
+    """Class of exceptions for http timeout."""
     pass
