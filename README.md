@@ -26,14 +26,15 @@ On installation a CLI will become available: ```indracli```
 ### CLI
 
 ```bash
-usage: indracli [-h] [-u EMAIL] [-p PASSWORD] [-d] {statistics,device,all,loadmatch,idle,exportmatch,charge,discharge,schedule} ...
+usage: indracli [-h] [-u EMAIL] [-p PASSWORD] [-d] {statistics,device,alldevices,all,loadmatch,idle,exportmatch,charge,discharge,schedule} ...
 
 Indra V2H CLI
 
 positional arguments:
-  {statistics,device,all,loadmatch,idle,exportmatch,charge,discharge,schedule}
+  {statistics,device,alldevices,all,loadmatch,idle,exportmatch,charge,discharge,schedule}
     statistics          show device statistics
     device              show device info
+    alldevices          show data on all available devices
     all                 show all info
     loadmatch           set mode to load matching
     idle                set mode to IDLE
@@ -68,7 +69,7 @@ Documentation to follow.
 This is a community project that lacks formal support.
 
 
-For support from the community please join the Indra V2H trial support community: https://indra.v2h.zendesk.com/hc/en-gb/community/topics
+For support from the community please join the Indra V2H trial support community: https://indrav2h.zendesk.com/hc/en-gb/community/topics
 
 
 

@@ -4,6 +4,7 @@ import argparse
 import configparser
 import asyncio
 import os
+import json
 from .connection import Connection
 from .v2hclient import v2hClient
 from . import V2H_MODES
@@ -24,12 +25,17 @@ async def main(args):
 
     # create connection
     conn = Connection(userEmail, userPass)
-    await conn.checkAPICreds()
+    # await conn.checkAPICreds()
 
     client = v2hClient(conn)
 
-    # refresh device/stats data
-    await client.refresh()
+    if (args.command == "alldevices"):
+        await client.refresh_device()
+        json_out = json.dumps(client.device.getDevices(), indent=2)
+        print(json_out)
+        exit()
+    
+    await client.refresh() # refresh device/stats data
 
     if args.command == "schedule":
         args.command = "clear" # translate displayed mode commmand to endpoint command
@@ -65,6 +71,7 @@ def cli():
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("statistics", help="show device statistics")
     subparsers.add_parser("device", help="show device info")
+    subparsers.add_parser("alldevices", help="show data on all available devices")
     subparsers.add_parser("all", help="show all info")
     subparsers.add_parser("loadmatch", help="set mode to load matching")
     subparsers.add_parser("idle", help="set mode to IDLE")

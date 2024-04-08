@@ -41,7 +41,7 @@ class Connection:
     
     async def send(self, method, url, json=None):
         if self._bearerToken is None:
-            _LOGGER.error("Missing BearerToken - calling updateBearerAuth()")
+            _LOGGER.debug("Missing BearerToken - calling updateBearerAuth()")
             await self.updateBearerAuth()
 
         async with httpx.AsyncClient(

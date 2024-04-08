@@ -1,4 +1,4 @@
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 V2H_MODES = {
     'LOAD_MATCH': 'loadmatch',
