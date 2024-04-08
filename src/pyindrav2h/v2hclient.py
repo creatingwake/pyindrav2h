@@ -14,8 +14,17 @@ class v2hClient:
     async def refresh(self):
         if self._device is None:
             self._device = v2hDevice(self._connection)
-
         await self._device.refresh_device_info()
+        await self._device.refresh_stats()
+    
+    async def refresh_device(self):
+        if self._device is None:
+            self._device = v2hDevice(self._connection)
+        await self._device.refresh_device_info()
+    
+    async def refresh_stats(self):
+        if self._device is None:
+            self._device = v2hDevice(self._connection)
         await self._device.refresh_stats()
 
     @property

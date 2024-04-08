@@ -150,3 +150,6 @@ class v2hDevice:
 
     def showAll(self):
         return self.showDevice() + "\n\n" + self.showStats()
+  
+    def getDevices(self):
+        return self.data["devices"]
