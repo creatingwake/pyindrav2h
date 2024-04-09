@@ -14,6 +14,7 @@ class v2hDevice:
 
     async def refresh_device_info(self):
         d = await self.connection.get("/authorize/validate")
+        _LOGGER.debug(f"/validate RESPONSE: {d}")
         self.data = d
     
     async def __set_mode(self, mode, payload=None):
@@ -43,79 +44,152 @@ class v2hDevice:
         _LOGGER.debug(f"Stats: {s}")
         a = await self.connection.get("/transactions/" + self.serial + 
                                       "/00000000-0000-0000-0000-000000000000/active")
+        _LOGGER.debug(f"/active RESPONSE: {a}")
         self.active = a
-
+    
     @property
     def id(self):
-        return self.active["id"]
+        try:
+            return self.active["id"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function id")
+            return None
 
     @property
     def serial(self):
-        return self.data["devices"][0]["deviceUID"]
+        try:
+            return self.data["devices"][0]["deviceUID"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function serial")
+            return None
 
     @property
     def lastOn(self):
-        return self.data["lastOn"]
-
+        try:
+            return self.data["lastOn"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function lastOn")
+            return None
+       
     @property
     def isActive(self):
-        return self.data["devices"][0]["active"]
+        try:
+            return self.data["devices"][0]["active"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function isActive")
+            return None   
 
     @property
     def updateTime(self):
-        return self.stats["time"]
+        try:
+            return self.stats["time"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function updateTime")
+            return None     
 
     @property
     def isBoosting(self):
-        return self.stats["isBoosting"]
-
+        try:
+            return self.stats["isBoosting"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function isBoosting")
+            return None
+        
     @property
     def mode(self):
-        return self.stats["mode"]
-    
+        try:
+            return self.stats["mode"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function mode")
+            return None
+        
     @property
     def state(self):
-        return self.stats["state"]
+        try:
+            return self.stats["state"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function state")
+            return None
 
     @property
     def activeEnergyFromEv(self):
-        return self.stats["data"]["activeEnergyFromEv"]
+        try:
+            return self.stats["data"]["activeEnergyFromEv"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function activeEnergyFromEv")
+            return None
 
     @property
     def activeEnergyToEv(self):
-        return self.stats["data"]["activeEnergyToEv"]
+        try:
+            return self.stats["data"]["activeEnergyToEv"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function activeEnergyToEv")
+            return None
 
     @property
     def powerToEv(self):
-        return self.stats["data"]["powerToEv"]
+        try:
+            return self.stats["data"]["powerToEv"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function powerToEv")
+            return None
 
     @property
     def houseLoad(self):
-        return self.stats["data"]["ctClamp"]
+        try:
+            return self.stats["data"]["ctClamp"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function houseLoad")
+            return None
 
     @property
     def current(self):
-        return self.stats["data"]["current"]
+        try:
+            return self.stats["data"]["current"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function current")
+            return None
 
     @property
     def voltage(self):
-        return self.stats["data"]["voltage"]
+        try:
+            return self.stats["data"]["voltage"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function voltage")
+            return None
 
     @property
     def freq(self):
-        return self.stats["data"]["freq"]
+        try:
+            return self.stats["data"]["freq"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function freq")
+            return None
 
     @property
     def temperature(self):
-        return self.stats["data"]["temp"]
+        try:
+            return self.stats["data"]["temp"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function temperature")
+            return None
 
     @property
     def soc(self):
-        return self.stats["data"]["soc"]
+        try:
+            return self.stats["data"]["soc"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function soc")
+            return None
 
     @property
     def isInterrupted(self):
-        return self.active["isInterrupted"]
+        try:
+            return self.active["isInterrupted"]
+        except KeyError as e:
+            _LOGGER.error(f"KeyError [{e}] in function isInterrupted")
+            return None
     
     
     def showDevice(self):
