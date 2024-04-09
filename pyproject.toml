@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyindrav2h"
-version = "0.0.5"
+version = "0.0.6"
 description = "API client and example CLI to interact with Indra V2H Chargers"
 readme = "README.md"
 authors = [{ name = "Paul Morris", email = "paul@creatingwake.com" }]
