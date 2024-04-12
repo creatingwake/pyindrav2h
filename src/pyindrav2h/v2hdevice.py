@@ -52,7 +52,7 @@ class v2hDevice:
         try:
             return self.active["id"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function id")
+            _LOGGER.debug(f"KeyError [{e}] in function id")
             return None
 
     @property
@@ -60,7 +60,7 @@ class v2hDevice:
         try:
             return self.data["devices"][0]["deviceUID"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function serial")
+            _LOGGER.debug(f"KeyError [{e}] in function serial")
             return None
 
     @property
@@ -68,7 +68,7 @@ class v2hDevice:
         try:
             return self.data["lastOn"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function lastOn")
+            _LOGGER.debug(f"KeyError [{e}] in function lastOn")
             return None
        
     @property
@@ -76,7 +76,7 @@ class v2hDevice:
         try:
             return self.data["devices"][0]["active"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function isActive")
+            _LOGGER.debug(f"KeyError [{e}] in function isActive")
             return None   
 
     @property
@@ -84,7 +84,7 @@ class v2hDevice:
         try:
             return self.stats["time"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function updateTime")
+            _LOGGER.debug(f"KeyError [{e}] in function updateTime")
             return None     
 
     @property
@@ -92,7 +92,7 @@ class v2hDevice:
         try:
             return self.stats["isBoosting"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function isBoosting")
+            _LOGGER.debug(f"KeyError [{e}] in function isBoosting")
             return None
         
     @property
@@ -100,7 +100,7 @@ class v2hDevice:
         try:
             return self.stats["mode"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function mode")
+            _LOGGER.debug(f"KeyError [{e}] in function mode")
             return None
         
     @property
@@ -108,7 +108,7 @@ class v2hDevice:
         try:
             return self.stats["state"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function state")
+            _LOGGER.debug(f"KeyError [{e}] in function state")
             return None
 
     @property
@@ -116,7 +116,7 @@ class v2hDevice:
         try:
             return self.stats["data"]["activeEnergyFromEv"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function activeEnergyFromEv")
+            _LOGGER.debug(f"KeyError [{e}] in function activeEnergyFromEv")
             return None
 
     @property
@@ -124,7 +124,7 @@ class v2hDevice:
         try:
             return self.stats["data"]["activeEnergyToEv"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function activeEnergyToEv")
+            _LOGGER.debug(f"KeyError [{e}] in function activeEnergyToEv")
             return None
 
     @property
@@ -132,7 +132,7 @@ class v2hDevice:
         try:
             return self.stats["data"]["powerToEv"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function powerToEv")
+            _LOGGER.debug(f"KeyError [{e}] in function powerToEv")
             return None
 
     @property
@@ -140,7 +140,7 @@ class v2hDevice:
         try:
             return self.stats["data"]["ctClamp"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function houseLoad")
+            _LOGGER.debug(f"KeyError [{e}] in function houseLoad")
             return None
 
     @property
@@ -148,7 +148,7 @@ class v2hDevice:
         try:
             return self.stats["data"]["current"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function current")
+            _LOGGER.debug(f"KeyError [{e}] in function current")
             return None
 
     @property
@@ -156,7 +156,7 @@ class v2hDevice:
         try:
             return self.stats["data"]["voltage"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function voltage")
+            _LOGGER.debug(f"KeyError [{e}] in function voltage")
             return None
 
     @property
@@ -164,7 +164,7 @@ class v2hDevice:
         try:
             return self.stats["data"]["freq"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function freq")
+            _LOGGER.debug(f"KeyError [{e}] in function freq")
             return None
 
     @property
@@ -172,7 +172,7 @@ class v2hDevice:
         try:
             return self.stats["data"]["temp"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function temperature")
+            _LOGGER.debug(f"KeyError [{e}] in function temperature")
             return None
 
     @property
@@ -180,7 +180,7 @@ class v2hDevice:
         try:
             return self.stats["data"]["soc"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function soc")
+            _LOGGER.debug(f"KeyError [{e}] in function soc")
             return None
 
     @property
@@ -188,7 +188,7 @@ class v2hDevice:
         try:
             return self.active["isInterrupted"]
         except KeyError as e:
-            _LOGGER.error(f"KeyError [{e}] in function isInterrupted")
+            _LOGGER.debug(f"KeyError [{e}] in function isInterrupted")
             return None
     
     
