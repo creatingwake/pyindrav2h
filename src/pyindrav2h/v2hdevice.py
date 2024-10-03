@@ -13,7 +13,8 @@ class v2hDevice:
         self.active = {}
 
     async def refresh_device_info(self):
-        d = await self.connection.get("/authorize/validate")
+        # d = await self.connection.get("/authorize/validate")
+        d = await self.connection.get("/devices")
         _LOGGER.debug(f"/validate RESPONSE: {d}")
         self.data = d
     
@@ -58,7 +59,7 @@ class v2hDevice:
     @property
     def serial(self):
         try:
-            return self.data["devices"][0]["deviceUID"]
+            return self.data[0]["deviceUID"]
         except KeyError as e:
             _LOGGER.debug(f"KeyError [{e}] in function serial")
             return None
@@ -66,7 +67,8 @@ class v2hDevice:
     @property
     def lastOn(self):
         try:
-            return self.data["lastOn"]
+            # return self.data["lastOn"]
+            return
         except KeyError as e:
             _LOGGER.debug(f"KeyError [{e}] in function lastOn")
             return None
@@ -74,7 +76,8 @@ class v2hDevice:
     @property
     def isActive(self):
         try:
-            return self.data["devices"][0]["active"]
+            # return self.data["devices"][0]["active"]
+            return
         except KeyError as e:
             _LOGGER.debug(f"KeyError [{e}] in function isActive")
             return None   
