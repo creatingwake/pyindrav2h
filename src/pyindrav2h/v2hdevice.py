@@ -2,6 +2,7 @@ import logging
 
 from .connection import Connection
 from . import V2H_MODES
+from .exceptions import V2HException
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -43,8 +44,13 @@ class v2hDevice:
                                       "/latest")
         self.stats = s
         _LOGGER.debug(f"Stats: {s}")
-        a = await self.connection.get("/transactions/" + self.serial + 
-                                      "/00000000-0000-0000-0000-000000000000/active")
+        try:
+            a = await self.connection.get("/transactions/" + self.serial +
+                                          "/00000000-0000-0000-0000-000000000000/active")
+        except V2HException as e:
+            if e.code == 404:
+                # 404 response is returned when the car is not plugged in.
+                a = {}
         _LOGGER.debug(f"/active RESPONSE: {a}")
         self.active = a
     
