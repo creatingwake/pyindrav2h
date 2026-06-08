@@ -1,6 +1,7 @@
 import logging
 from .connection import Connection
 from .v2hdevice import v2hDevice
+from .v2hschedule import v2hSchedule
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -10,12 +11,16 @@ class v2hClient:
     ) -> None:
         self._connection = connection
         self._device = None
+        self._schedule = None
 
     async def refresh(self):
         if self._device is None:
             self._device = v2hDevice(self._connection)
         await self._device.refresh_device_info()
         await self._device.refresh_stats()
+        if self._schedule is None:
+            self._schedule = v2hSchedule(self._connection)
+        await self._schedule.refresh_schedules()
     
     async def refresh_device(self):
         if self._device is None:
@@ -30,3 +35,7 @@ class v2hClient:
     @property
     def device(self):
         return self._device
+
+    @property
+    def schedule(self):
+        return self._schedule
