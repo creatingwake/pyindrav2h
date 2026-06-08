@@ -84,10 +84,11 @@ class v2hSchedule:
                 'Use v2hSchedule.refresh_schedules() to get an up-to-date list '
                 'of available presets.'
             )
-        await self._connection.post(
+        resp = await self._connection.post(
             '/trials/v2h/schedules',
             {'deviceUid': device.serial, 'presetSourceID': schedule}
         )
+        return resp
 
     @property
     def presets(self):
