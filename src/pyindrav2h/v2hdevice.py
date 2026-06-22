@@ -225,7 +225,7 @@ class v2hDevice:
         ret = ret + "--- Device info ---\n"
         ret = ret + f"Device UID: {self.serial}\n"
         ret = ret + f"Last On date: {self.lastOn}\n"
-        ret = ret + f"Device active: {self.isActive}"
+        ret = ret + f"Device active: {self.isActive}\n"
 
         return ret
 
@@ -249,8 +249,21 @@ class v2hDevice:
         ret = ret + f"Schedule active?: {not self.isInterrupted}\n"
         return ret
 
+    def showSchedule(self):
+        ret = ""
+
+        ret = ret + "--- Loaded schedule ---\n"
+        ret = ret + f"Schedule ID: {self.loadedSchedule}\n"
+        props = self._schedule.describe_schedule(self.loadedSchedule)
+        ret = ret + f"Schedule properties: {props}\n"
+        return ret
+
     def showAll(self):
-        return self.showDevice() + "\n\n" + self.showStats()
+        return (
+            self.showDevice()
+            + "\n" + self.showStats()
+            + "\n" + self.showSchedule()
+        )
   
     def getDevices(self):
         return self.data["devices"]

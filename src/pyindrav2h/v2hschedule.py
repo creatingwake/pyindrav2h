@@ -1,4 +1,5 @@
 import logging
+from textwrap import dedent
 from .connection import Connection
 
 _LOGGER = logging.getLogger(__name__)
@@ -98,3 +99,26 @@ class v2hSchedule:
     @property
     def presets(self):
         return {schedule['id']: schedule for schedule in self._preset_schedules}
+
+    def describe_schedule(self, schedule_id):
+        """
+        Return  details of the preset schedule specified by schedule_id
+        as a multi-line string for printing.
+        """
+        schedule = self.presets[schedule_id]
+        output = "\n".join([
+            f"Schedule ID: {schedule_id}",
+            f"Name: {schedule["name"]}",
+            f"Description: {schedule["description"]}",
+            "Rules:\n"
+        ])
+        for rule in schedule["rules"]:
+            output += dedent(
+                f"""\
+                - Start time: {rule["start"]}
+                  End time: {rule["end"]}
+                  Mode: {rule["mode"]}
+                  Recurrence: {rule["recurrence"]}
+                """
+            )
+        return output
