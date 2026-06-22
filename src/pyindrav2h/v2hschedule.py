@@ -1,6 +1,5 @@
 import logging
 from .connection import Connection
-from .v2hdevice import v2hDevice
 
 _LOGGER = logging.getLogger(__name__)
 

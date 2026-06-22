@@ -50,9 +50,9 @@ async def main(args):
             if command == args.command:
                 print(await client.device.select_charger_mode(mode))
     elif args.command == "get-schedule":
-        print(await client.schedule.get_schedule(client.device))
+        print(client.device.loadedSchedule)
     elif args.command == "set-schedule":
-        print(await client.schedule.set_schedule(client.device, args.schedule))
+        print(await client.device.set_loaded_schedule(args.schedule))
 
 def cli():
     config = configparser.ConfigParser()
