@@ -24,26 +24,28 @@ class v2hSchedule:
         - recurrance: how often the rule runs ('MO,TU,WE,TH,FR,SA,SU') is
           all week.
 
-    The available presets are expected to change infrequently, and can be
-    downloaded and cached using v2hSchedule.refresh_schedules().
+    The available presets are expected to change infrequently and can
+    be downloaded and cached using v2hSchedule.refresh_schedules().
+    Each time a get or set of the current schedule is performed, the
+    latest available list of presets is retrived automatically too.
 
     The available presets are accessible through vh2Schedule.presets,
     which returns a dictionary keyed by the schedule IDs, one entry for
     each schedule as a dictionary in the format listed above.
 
     To make a V2H device use a preset schedule, call
-    `v2hSchedule.set_schedule(device, schedule), with device being
-    a v2hDevice instance and schedule being the ID of one of the
+    `v2hSchedule.set_schedule(device, schedule_id), with device being
+    a v2hDevice instance and schedule_id being the ID of one of the
     available presets. An error occurs if a preset is asked for which
-    does not exist in the local cache. It may be prudent to call
-    `refresh_schedules` before calling `set_schedule` in case the available
-    list of schedules has changed since it was last fetched.
+    does not exist remotely, noting that the list of available presets
+    on Indra's servers may have changed since the last time the local
+    client retrived them before the `set_schedule` call.
     """
     def __init__(
         self, connection: Connection
     ) -> None:
         self._connection = connection
-        self._preset_schedules = None
+        self._preset_schedules = {}
 
     async def refresh_schedules(self):
         scheds = await self._connection.get('/trials/v2h/schedules/presets/')
@@ -66,10 +68,13 @@ class v2hSchedule:
         active = await self._connection.get(
             f'/trials/v2h/devices/{device.serial}/schedules/active'
         )
+        if active['presetSourceId'] not in self.presets:
+            # New schedules added and set since last refresh.
+            await self.refresh_schedules()
         active_schedule = self.presets[active['presetSourceId']]
         return active_schedule
 
-    async def set_schedule(self, device, schedule):
+    async def set_schedule(self, device, schedule_id):
         """
         Set the active schedule of a device.
 
@@ -78,7 +83,8 @@ class v2hSchedule:
         device:   a v2hDevice instance of a charger device.
         schedule: the ID of one of the schedules in v2hSchedule.presets
         """
-        if schedule not in self.presets:
+        await self.refresh_schedules()
+        if schedule_id not in self.presets:
             raise ValueError(
                 'schedule must be one of the IDs in v2hSchedule.presets.\n'
                 'Use v2hSchedule.refresh_schedules() to get an up-to-date list '
@@ -86,7 +92,7 @@ class v2hSchedule:
             )
         resp = await self._connection.post(
             '/trials/v2h/schedules',
-            {'deviceUid': device.serial, 'presetSourceID': schedule}
+            {'deviceUid': device.serial, 'presetSourceID': schedule_id}
         )
         return resp
 
