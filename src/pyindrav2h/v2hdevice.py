@@ -3,15 +3,18 @@ import logging
 from .connection import Connection
 from . import V2H_MODES
 from .exceptions import V2HException
+from .v2hschedule import v2hSchedule
 
 _LOGGER = logging.getLogger(__name__)
 
 class v2hDevice:
     def __init__(self, connection: Connection) -> None:
         self.connection = connection
+        self._schedule = v2hSchedule(connection)
         self.data = {}
         self.stats = {}
         self.active = {}
+        self._loaded_schedule = None
 
     async def refresh_device_info(self):
         # d = await self.connection.get("/authorize/validate")
@@ -53,6 +56,17 @@ class v2hDevice:
                 a = {}
         _LOGGER.debug(f"/active RESPONSE: {a}")
         self.active = a
+
+    async def refresh_loaded_schedule(self):
+        s = await self._schedule.get_schedule(self)
+        self._loaded_schedule = s["id"]
+
+    async def set_loaded_schedule(self, schedule_id):
+        await self._schedule.set_schedule(self, schedule_id)
+        # Confirm schedule update successful.
+        await self.refresh_loaded_schedule()
+        if self._loaded_schedule != schedule_id:
+            raise V2HException(f"Failed to set active schedule to {schedule_id}.")
     
     @property
     def id(self):
@@ -199,6 +213,10 @@ class v2hDevice:
         except KeyError as e:
             _LOGGER.debug(f"KeyError [{e}] in function isInterrupted")
             return None
+
+    @property
+    def loadedSchedule(self):
+        return self._loaded_schedule
     
     
     def showDevice(self):
@@ -207,7 +225,7 @@ class v2hDevice:
         ret = ret + "--- Device info ---\n"
         ret = ret + f"Device UID: {self.serial}\n"
         ret = ret + f"Last On date: {self.lastOn}\n"
-        ret = ret + f"Device active: {self.isActive}"
+        ret = ret + f"Device active: {self.isActive}\n"
 
         return ret
 
@@ -231,8 +249,21 @@ class v2hDevice:
         ret = ret + f"Schedule active?: {not self.isInterrupted}\n"
         return ret
 
+    def showSchedule(self):
+        ret = ""
+
+        ret = ret + "--- Loaded schedule ---\n"
+        ret = ret + f"Schedule ID: {self.loadedSchedule}\n"
+        props = self._schedule.describe_schedule(self.loadedSchedule)
+        ret = ret + f"Schedule properties: {props}\n"
+        return ret
+
     def showAll(self):
-        return self.showDevice() + "\n\n" + self.showStats()
+        return (
+            self.showDevice()
+            + "\n" + self.showStats()
+            + "\n" + self.showSchedule()
+        )
   
     def getDevices(self):
         return self.data["devices"]
