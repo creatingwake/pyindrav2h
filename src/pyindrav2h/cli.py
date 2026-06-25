@@ -49,6 +49,10 @@ async def main(args):
         for mode, command in V2H_MODES.items():
             if command == args.command:
                 print(await client.device.select_charger_mode(mode))
+    elif args.command == "get-schedule":
+        print(client.device.showSchedule())
+    elif args.command == "set-schedule":
+        print(await client.device.set_loaded_schedule(args.schedule))
 
 def cli():
     config = configparser.ConfigParser()
@@ -79,6 +83,10 @@ def cli():
     subparsers.add_parser("charge", help="set mode to CHARGE")
     subparsers.add_parser("discharge", help="set mode to discharge")
     subparsers.add_parser("schedule", help="return to scheuduled mode")
+    subparsers.add_parser("get-schedule", help="get the currently-active schedule")
+    set_schedule = subparsers.add_parser("set-schedule",
+                                         help="set the active schedule")
+    set_schedule.add_argument("schedule", help="ID of the schedule to use")
 
     args = parser.parse_args()
 
