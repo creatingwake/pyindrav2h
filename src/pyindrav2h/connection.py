@@ -32,7 +32,7 @@ class Connection:
         self._xsrfToken = await self.getXsrf(loginUrl)
         _LOGGER.debug(f"XSRF token: {self._xsrfToken}")
         self._bearerToken = await self.getAuth("POST", "/login")
-        self._headers["Authorization"] = self._bearerToken
+        self._headers["Authorization"] = f"Bearer {self._bearerToken}"
 
     async def checkAPICreds(self):
         await self.updateBearerAuth()
